@@ -1,10 +1,7 @@
 package org.example.jwtloginexample.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.jwtloginexample.roles.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +28,7 @@ public class User implements UserDetails {
 
     @Column(name = "last_name")
     private String lastName;
+    @Getter
     private int age;
     private String email;
     private String password;

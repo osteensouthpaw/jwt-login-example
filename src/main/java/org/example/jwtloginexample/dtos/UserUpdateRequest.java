@@ -1,10 +1,9 @@
 package org.example.jwtloginexample.dtos;
 
-public record RegistrationRequest(
+public record UserUpdateRequest(
         String firstName,
         String lastName,
         int age,
-        String email,
-        String password
+        String email
 ) {
 }

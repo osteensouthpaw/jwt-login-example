@@ -43,24 +43,26 @@ public class JwtService {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(String username, String roles) {
+        return generateToken(Map.of("roles", roles), username);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+
+
+    public String generateToken(Map<String, Object> extraClaims, String username) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(username)
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)))
-                .signWith(getSignInKey())
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     private boolean isExpiredToken(String token) {
-        Date expirationDate = extractClaim(token, Claims::getExpiration);
-        return new Date().after(expirationDate);
+        Date today = Date.from(Instant.now());
+        return extractClaim(token, Claims::getExpiration).before(today);
     }
 
     public boolean isValidToken(String token, UserDetails userDetails) {
